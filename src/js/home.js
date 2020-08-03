@@ -57,6 +57,28 @@ fetch('https://randomuser.me/api/').then( response => {
   }
   const actionList = await getData('https://yts.mx/api/v2/list_movies.json?genre=action')
   
+  // INCLUIR HTML CON JAVASCRIPT  // TEMPLATES
+  function videoItemTemplate(movie) {
+    return (
+      `<div class="primaryPlaylistItem">
+          <div class="primaryPlaylistItem-image">
+              <img src="${movie.medium_cover_image}">
+          </div>
+          <h4 class="primaryPlaylistItem-title">
+              ${movie.title}
+          </h4>
+      </div>`
+    )
+  }
+  // console.log(videoItemTemplate('src/images/covers/bitcoin.jpg', 'bitcoin'))
+
+  // HACER DEBUGGER CON UNA ARROW FUNCTION
+  actionList.data.movies.forEach( movie => {
+    const HTMLString = videoItemTemplate(movie)
+    console.log(HTMLString)
+  })
+
+  
   let dramaList;
   getData('https://yts.mx/api/v2/list_movies.json?genre=drama').then( data => {
     console.log('dramaList', data)
@@ -103,19 +125,7 @@ fetch('https://randomuser.me/api/').then( response => {
   //     '</h4>'+
   // '</div>'
 
-  // INCLUIR HTML CON JAVASCRIPT 
-  function videoItemTemplate(src, title) {
-    return (
-      `<div class="primaryPlaylistItem">
-          <div class="primaryPlaylistItem-image">
-              <img src="${src}">
-          </div>
-          <h4 class="primaryPlaylistItem-title">
-              ${title}
-          </h4>
-      </div>`
-    )
-  }
-  console.log(videoItemTemplate('src/images/covers/bitcoin.jpg', 'bitcoin'))
+  
+  
 
 })() // Los () ejecutan la funcion load
