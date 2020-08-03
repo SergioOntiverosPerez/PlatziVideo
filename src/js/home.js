@@ -93,4 +93,29 @@ fetch('https://randomuser.me/api/').then( response => {
   const $modalImage = $modal.querySelector('img')
   const $modalDescription = $modal.querySelector('p')
 
+  // Incluir html usando jquery
+  // '<div class="primaryPlaylistItem">'+
+  //   '<div class="primaryPlaylistItem-image">'+
+  //     '<img src="src/images/covers/midnight.jpg">'+
+  //   '</div>'+
+  //     '<h4 class="primaryPlaylistItem-title">'+
+  //       'Titulo de la peli'+
+  //     '</h4>'+
+  // '</div>'
+
+  // INCLUIR HTML CON JAVASCRIPT 
+  function videoItemTemplate(src, title) {
+    return (
+      `<div class="primaryPlaylistItem">
+          <div class="primaryPlaylistItem-image">
+              <img src="${src}">
+          </div>
+          <h4 class="primaryPlaylistItem-title">
+              ${title}
+          </h4>
+      </div>`
+    )
+  }
+  console.log(videoItemTemplate('src/images/covers/bitcoin.jpg', 'bitcoin'))
+
 })() // Los () ejecutan la funcion load
