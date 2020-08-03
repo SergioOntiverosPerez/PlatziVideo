@@ -57,9 +57,11 @@
   }
 
   const $form = document.getElementById('form')
+  const $home = document.getElementById('home')
   $form.addEventListener('submit', (event) => {
     // debugger
     event.preventDefault() // para evitar que recargue
+    $home.classList.add('search-active')
   })
   const actionList = await getData('https://yts.mx/api/v2/list_movies.json?genre=action')
   const dramaList = await getData('https://yts.mx/api/v2/list_movies.json?genre=drama')
@@ -88,9 +90,10 @@
   }
   // declaro el container
   
+
   function addEventClick($element){
     $element.addEventListener('click', () => {
-      alert('click')
+      showModal()
     })
     //Jquery
     // $('div').on('click', function(event) {
@@ -140,7 +143,7 @@
 
   const $featuringContainer = document.getElementById('featuring')
   
-  const $home = document.getElementById('home')
+  
 
   const $modal = document.getElementById('modal');
   const $overlay = document.getElementById('overlay')
@@ -150,6 +153,14 @@
   const $modalImage = $modal.querySelector('img')
   const $modalDescription = $modal.querySelector('p')
 
+  function showModal() {
+    $overlay.classList.add('active')
+    $modal.style.animation = 'modalIn .8s forwards'
+  }
+  $hideModal.addEventListener('click', () => {
+    $overlay.classList.remove('active')
+    $modal.style.animation = 'modalOut .8s forwards'
+  })
   // Incluir html usando jquery
   // '<div class="primaryPlaylistItem">'+
   //   '<div class="primaryPlaylistItem-image">'+
