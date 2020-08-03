@@ -1,52 +1,52 @@
-console.log('hola mundo!');
+// console.log('hola mundo!');
 
-const noChange = "Sergio"
+// const noChange = "Sergio"
 
-let change = "Sergio Pastor"
+// let change = "Sergio Pastor"
 
-function cambiarNombre(nuevoNombre){
-  change = nuevoNombre;
-}
+// function cambiarNombre(nuevoNombre){
+//   change = nuevoNombre;
+// }
 
-const getUser = new Promise( (todoBien, todoMal) => {
-  // llamar a un api
-  setTimeout(function(){
-    // luego de tres segundos
-    todoMal('Time out')
-  }, 3000)  
+// const getUser = new Promise( (todoBien, todoMal) => {
+//   // llamar a un api
+//   setTimeout(function(){
+//     // luego de tres segundos
+//     todoMal('Time out')
+//   }, 3000)  
   
-  todoBien('Time ok!')
-})
+//   todoBien('Time ok!')
+// })
 
-getUser.then( message => {
-    console.log(message)
-}).catch( message => {
-  console.log(message)
-})
+// getUser.then( message => {
+//     console.log(message)
+// }).catch( message => {
+//   console.log(message)
+// })
 
-// jquery
-$.ajax( {url: 'https://randomuser.me/api/',
-    method: 'GET',
-    success: function(data){
-        console.log(data)
-    },
-    error: function (error) {
-        console.log(error)
-    }
-})
+// // jquery
+// $.ajax( {url: 'https://randomuser.me/api/',
+//     method: 'GET',
+//     success: function(data){
+//         console.log(data)
+//     },
+//     error: function (error) {
+//         console.log(error)
+//     }
+// })
 
-// javascript
+// // javascript
 
-fetch('https://randomuser.me/api/').then( response => {
-  // console.log(response)
-  return response.json()
-}).then(user => {
-  return user.results[0].name.first
-}).then(name => {
-  console.log(name)
-}).catch( err => {
-  console.log('algo falló')
-});
+// fetch('https://randomuser.me/api/').then( response => {
+//   // console.log(response)
+//   return response.json()
+// }).then(user => {
+//   return user.results[0].name.first
+// }).then(name => {
+//   console.log(name)
+// }).catch( err => {
+//   console.log('algo falló')
+// });
 
 (async function load(){
   // await
@@ -72,32 +72,42 @@ fetch('https://randomuser.me/api/').then( response => {
   }
   // console.log(videoItemTemplate('src/images/covers/bitcoin.jpg', 'bitcoin'))
 
-  // declaro el container
-  const $actionContainer = document.querySelector('#action')
-  // HACER DEBUGGER CON UNA ARROW FUNCTION
-  actionList.data.movies.forEach( movie => {
-    const HTMLString = videoItemTemplate(movie)
+  function createTemplate(HTMLString){
     const html = document.implementation.createHTMLDocument()
     html.body.innerHTML = HTMLString
-    $actionContainer.append(html.body.children[0])
-    console.log(HTMLString)
-  })
-
+    return html.body.children[0]
+  }
+  // declaro el container
   
-  let dramaList;
-  getData('https://yts.mx/api/v2/list_movies.json?genre=drama').then( data => {
-    console.log('dramaList', data)
-    dramaList = data
-  })
+  // HACER DEBUGGER CON UNA ARROW FUNCTION
+  function renderMovieList(list, $container){
+    // actionList.data.movies
+    $container.children[0].remove()
+    list.forEach( movie => {
+      const HTMLString = videoItemTemplate(movie)
+      const movieElement = createTemplate(HTMLString)
+      $container.append(movieElement)
+      // console.log(HTMLString)
+    })
+  }
+  const $actionContainer = document.querySelector('#action')
+  renderMovieList(actionList.data.movies, $actionContainer)
   
-  console.log('actionList', actionList)
+  const dramaList = await getData('https://yts.mx/api/v2/list_movies.json?genre=drama')
+  const $dramaContainer = document.getElementById('drama')
+  renderMovieList(dramaList.data.movies, $dramaContainer)
+  // fetch('https://yts.mx/api/v2/list_movies.json?genre=drama').then( response => {
+  //   return response.json() 
+  // }).then( listMovies => { dramaList = listMovies.data.movies } ).then(renderMovieList(dramaList, $dramaContainer))
 
-  let animationList;
-  getData('https://yts.mx/api/v2/list_movies.json?genre=animation').then( data => {
-    console.log('animationList', data)
-    animationList = data
-  })
+  // console.log('actionList', actionList)
 
+  const animationList = await getData('https://yts.mx/api/v2/list_movies.json?genre=animation')
+  const $animationContainer = document.getElementById('animation')
+  renderMovieList(animationList.data.movies, $animationContainer)
+  // fetch('https://yts.mx/api/v2/list_movies.json?genre=animation').then( data => {
+  //   return data.json()
+  // }).then( listMovies => { animationList = listMovies.data.movies } ).then( renderMovieList(animationList, $animationContainer) )
   // // selector con JQuery
   // const $home = $('.home ');
 
@@ -105,8 +115,8 @@ fetch('https://randomuser.me/api/').then( response => {
   // const $newHome = document.getElementById('home')
 
   
-  const $dramaContainer = document.getElementById('#drama')
-  const $animationContainer = document.getElementById('#animation')
+  
+  
 
   const $featuringContainer = document.getElementById('#featuring')
   const $form = document.getElementById('#form')
