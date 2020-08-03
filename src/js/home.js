@@ -93,8 +93,12 @@
     })
     $featuringContainer.append($loader)
     const data = new FormData($form)
-    const peli = await getData(`${BASE_API}list_movies.json?limit=1&query_term=${data.get('name')}`)
-    const HTMLString = featuringTemplate(peli.data.movies[0])
+    const {
+      data: {
+        movies: peli
+      }
+    } = await getData(`${BASE_API}list_movies.json?limit=1&query_term=${data.get('name')}`)
+    const HTMLString = featuringTemplate(peli[0])
     $featuringContainer.innerHTML = HTMLString
   })
   const actionList = await getData(`${BASE_API}list_movies.json?genre=action`)
