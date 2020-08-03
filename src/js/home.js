@@ -58,10 +58,25 @@
 
   const $form = document.getElementById('form')
   const $home = document.getElementById('home')
+  const $featuringContainer = document.getElementById('featuring')
+
+  function setAttributes($element, attributes){
+    for(const attribute in attributes){
+      $element.setAttribute(attribute, attributes[attribute])
+    }
+  }
+
   $form.addEventListener('submit', (event) => {
     // debugger
     event.preventDefault() // para evitar que recargue
     $home.classList.add('search-active')
+    const $loader = document.createElement('img')
+    setAttributes($loader, {
+      src: 'src/images/loader.gif',
+      height: 50,
+      width: 50,
+    })
+    $featuringContainer.append($loader)
   })
   const actionList = await getData('https://yts.mx/api/v2/list_movies.json?genre=action')
   const dramaList = await getData('https://yts.mx/api/v2/list_movies.json?genre=drama')
@@ -81,6 +96,7 @@
       </div>`
     )
   }
+
   // console.log(videoItemTemplate('src/images/covers/bitcoin.jpg', 'bitcoin'))
 
   function createTemplate(HTMLString){
@@ -94,6 +110,10 @@
   function addEventClick($element){
     $element.addEventListener('click', () => {
       showModal()
+      
+      // const HTMLString = modalTemplate(movie)
+      // const movieElements = createTemplate(HTMLString)
+
     })
     //Jquery
     // $('div').on('click', function(event) {
@@ -139,12 +159,6 @@
 
   
   
-  
-
-  const $featuringContainer = document.getElementById('featuring')
-  
-  
-
   const $modal = document.getElementById('modal');
   const $overlay = document.getElementById('overlay')
   const $hideModal = document.getElementById('hide-modal')
