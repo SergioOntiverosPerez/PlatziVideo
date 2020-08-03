@@ -72,9 +72,14 @@ fetch('https://randomuser.me/api/').then( response => {
   }
   // console.log(videoItemTemplate('src/images/covers/bitcoin.jpg', 'bitcoin'))
 
+  // declaro el container
+  const $actionContainer = document.querySelector('#action')
   // HACER DEBUGGER CON UNA ARROW FUNCTION
   actionList.data.movies.forEach( movie => {
     const HTMLString = videoItemTemplate(movie)
+    const html = document.implementation.createHTMLDocument()
+    html.body.innerHTML = HTMLString
+    $actionContainer.append(html.body.children[0])
     console.log(HTMLString)
   })
 
@@ -99,7 +104,7 @@ fetch('https://randomuser.me/api/').then( response => {
   // // selector Javascript
   // const $newHome = document.getElementById('home')
 
-  const $actionContainer = document.querySelector('#action')
+  
   const $dramaContainer = document.getElementById('#drama')
   const $animationContainer = document.getElementById('#animation')
 
