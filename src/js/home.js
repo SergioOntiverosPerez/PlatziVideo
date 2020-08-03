@@ -55,8 +55,17 @@
     const data = await response.json()
     return data;
   }
+
+  const $form = document.getElementById('form')
+  $form.addEventListener('submit', (event) => {
+    // debugger
+    event.preventDefault() // para evitar que recargue
+  })
   const actionList = await getData('https://yts.mx/api/v2/list_movies.json?genre=action')
-  
+  const dramaList = await getData('https://yts.mx/api/v2/list_movies.json?genre=drama')
+  const animationList = await getData('https://yts.mx/api/v2/list_movies.json?genre=animation')
+
+
   // INCLUIR HTML CON JAVASCRIPT  // TEMPLATES
   function videoItemTemplate(movie) {
     return (
@@ -79,6 +88,16 @@
   }
   // declaro el container
   
+  function addEventClick($element){
+    $element.addEventListener('click', () => {
+      alert('click')
+    })
+    //Jquery
+    // $('div').on('click', function(event) {
+    //   alert('hola')
+    // })
+  }
+
   // HACER DEBUGGER CON UNA ARROW FUNCTION
   function renderMovieList(list, $container){
     // actionList.data.movies
@@ -87,13 +106,14 @@
       const HTMLString = videoItemTemplate(movie)
       const movieElement = createTemplate(HTMLString)
       $container.append(movieElement)
+      addEventClick(movieElement)
       // console.log(HTMLString)
     })
   }
   const $actionContainer = document.querySelector('#action')
   renderMovieList(actionList.data.movies, $actionContainer)
   
-  const dramaList = await getData('https://yts.mx/api/v2/list_movies.json?genre=drama')
+  
   const $dramaContainer = document.getElementById('drama')
   renderMovieList(dramaList.data.movies, $dramaContainer)
   // fetch('https://yts.mx/api/v2/list_movies.json?genre=drama').then( response => {
@@ -102,7 +122,7 @@
 
   // console.log('actionList', actionList)
 
-  const animationList = await getData('https://yts.mx/api/v2/list_movies.json?genre=animation')
+  
   const $animationContainer = document.getElementById('animation')
   renderMovieList(animationList.data.movies, $animationContainer)
   // fetch('https://yts.mx/api/v2/list_movies.json?genre=animation').then( data => {
@@ -118,9 +138,9 @@
   
   
 
-  const $featuringContainer = document.getElementById('#featuring')
-  const $form = document.getElementById('#form')
-  const $home = document.getElementById('#home')
+  const $featuringContainer = document.getElementById('featuring')
+  
+  const $home = document.getElementById('home')
 
   const $modal = document.getElementById('modal');
   const $overlay = document.getElementById('overlay')
