@@ -239,6 +239,7 @@
     $modalImage.setAttribute('src', data.medium_cover_image)
     $modalDescription.textContent = data.description_full
   }
+
   $hideModal.addEventListener('click', () => {
     $overlay.classList.remove('active')
     $modal.style.animation = 'modalOut .8s forwards'
