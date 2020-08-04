@@ -53,7 +53,10 @@
   async function getData(url){
     const response = await fetch(url)
     const data = await response.json()
-    return data;
+    if(data.data.movie_count > 0){
+      return data
+    }
+    throw new Error('No se encontraron resultados')
   }
 
   const $form = document.getElementById('form')
@@ -93,18 +96,21 @@
     })
     $featuringContainer.append($loader)
     const data = new FormData($form)
-    const {
-      data: {
-        movies: peli
-      }
-    } = await getData(`${BASE_API}list_movies.json?limit=1&query_term=${data.get('name')}`)
-    const HTMLString = featuringTemplate(peli[0])
-    $featuringContainer.innerHTML = HTMLString
+    try {
+      const {
+        data: {
+          movies: peli
+        }
+      } = await getData(`${BASE_API}list_movies.json?limit=1&query_term=${data.get('name')}`)
+      const HTMLString = featuringTemplate(peli[0])
+      $featuringContainer.innerHTML = HTMLString
+    } catch (error) {
+        alert(error.message)
+        $loader.remove()
+        $home.classList.remove('search-active')
+    }
+    
   })
-  const { data: { movies: actionList } } = await getData(`${BASE_API}list_movies.json?genre=action`)
-  const { data: { movies: dramaList } }= await getData(`${BASE_API}list_movies.json?genre=drama`)
-  const { data: { movies: animationList } } = await getData(`${BASE_API}list_movies.json?genre=animation`)
-
 
   // INCLUIR HTML CON JAVASCRIPT  // TEMPLATES
   function videoItemTemplate(movie, category) {
@@ -119,17 +125,13 @@
       </div>`
     )
   }
-
   // console.log(videoItemTemplate('src/images/covers/bitcoin.jpg', 'bitcoin'))
-
   function createTemplate(HTMLString){
     const html = document.implementation.createHTMLDocument()
     html.body.innerHTML = HTMLString
     return html.body.children[0]
   }
   // declaro el container
-  
-
   function addEventClick($element){
     $element.addEventListener('click', () => {
       showModal($element)
@@ -143,7 +145,6 @@
     //   alert('hola')
     // })
   }
-
   // HACER DEBUGGER CON UNA ARROW FUNCTION
   function renderMovieList(list, $container, category){
     // actionList.data.movies
@@ -152,14 +153,22 @@
       const HTMLString = videoItemTemplate(movie, category)
       const movieElement = createTemplate(HTMLString)
       $container.append(movieElement)
+      const image = movieElement.querySelector('img')
+      image.addEventListener('load', (event) => {
+        event.srcElement.classList.add('fadeIn')
+      })
       addEventClick(movieElement)
       // console.log(HTMLString)
     })
   }
+
+  const { data: { movies: actionList } } = await getData(`${BASE_API}list_movies.json?genre=action`)
+  window.localStorage.setItem('actionList', JSON.stringify(actionList))
   const $actionContainer = document.querySelector('#action')
   renderMovieList(actionList, $actionContainer, 'action')
   
-  
+  const { data: { movies: dramaList } }= await getData(`${BASE_API}list_movies.json?genre=drama`)
+  window.localStorage.setItem('dramaList', JSON.stringify(dramaList))
   const $dramaContainer = document.getElementById('drama')
   renderMovieList(dramaList, $dramaContainer, 'drama')
   // fetch('https://yts.mx/api/v2/list_movies.json?genre=drama').then( response => {
@@ -168,7 +177,8 @@
 
   // console.log('actionList', actionList)
 
-  
+  const { data: { movies: animationList } } = await getData(`${BASE_API}list_movies.json?genre=animation`)
+  window.localStorage.setItem('animationList', JSON.stringify(animationList))
   const $animationContainer = document.getElementById('animation')
   renderMovieList(animationList, $animationContainer, 'animation')
   // fetch('https://yts.mx/api/v2/list_movies.json?genre=animation').then( data => {
@@ -180,8 +190,6 @@
   // // selector Javascript
   // const $newHome = document.getElementById('home')
 
-  
-  
   const $modal = document.getElementById('modal');
   const $overlay = document.getElementById('overlay')
   const $hideModal = document.getElementById('hide-modal')
@@ -232,8 +240,5 @@
   //       'Titulo de la peli'+
   //     '</h4>'+
   // '</div>'
-
-  
-  
 
 })() // Los () ejecutan la funcion load
