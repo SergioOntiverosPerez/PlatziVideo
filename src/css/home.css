@@ -46,9 +46,9 @@ body {
 }
 
 /*Logo*/
-.logo {
+/* .logo {
 
-}
+} */
 .logo-image {
   margin: 0;
 }
@@ -202,8 +202,8 @@ body {
   transform: scale(1.1)
 }
 */
-.primaryPlaylistItem-image {
-}
+/* .primaryPlaylistItem-image {
+} */
 
 .primaryPlaylistItem img {
   width: 170px;
